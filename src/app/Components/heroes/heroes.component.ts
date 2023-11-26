@@ -1,9 +1,10 @@
+import { HeroService } from './../../Services/hero.service';
 import { NgFor, NgIf, UpperCasePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HEROES } from 'src/app/Heroes/mock-heroes';
 import { Hero } from 'src/app/Modules/hero';
 import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-heroes',
@@ -12,11 +13,33 @@ import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
   standalone: true,
   imports: [FormsModule, NgIf, NgFor, UpperCasePipe, HeroDetailComponent],
 })
-export class HeroesComponent {
-  hero: Hero[] = HEROES;
+export class HeroesComponent implements OnInit, OnDestroy {
+  heroes: Hero[];
   selectedHero: Hero;
+
+  heroSub: Subscription;
+
+  constructor(private heroService: HeroService) {}
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.getHeroes();
+  }
+
+  getHeroes(): void {
+    this.heroSub = this.heroService.getHeroes().subscribe((resp: Hero[]) => {
+      this.heroes = resp;
+    });
+  }
 
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.heroSub.unsubscribe();
   }
 }
