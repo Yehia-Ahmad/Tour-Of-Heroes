@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeroesComponent } from './Components/heroes/heroes.component';
 import { FormsModule } from '@angular/forms';
+import { HeroDetailComponent } from './Components/hero-detail/hero-detail.component';
 
 @NgModule({
   declarations: [AppComponent],
