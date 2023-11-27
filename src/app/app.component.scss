@@ -11,10 +11,11 @@ nav a {
   color: #3d3d3d;
   border-radius: 4px;
   &:hover {
-    color: white;
+    color: #fff;
     background-color: #42545c;
   }
   &:active {
-    background-color: black;
+    background-color: #000;
+    color: #fff;
   }
 }
