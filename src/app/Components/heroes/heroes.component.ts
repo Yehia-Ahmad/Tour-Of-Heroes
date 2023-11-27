@@ -1,18 +1,26 @@
 import { HeroService } from './../../Services/hero.service';
 import { NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Hero } from 'src/app/Modules/hero';
 import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
 import { Subscription } from 'rxjs';
-import { MessageService } from 'src/app/Services/message.service';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-heroes',
   templateUrl: './heroes.component.html',
   styleUrls: ['./heroes.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgIf, NgFor, UpperCasePipe, HeroDetailComponent],
+  imports: [
+    FormsModule,
+    NgIf,
+    NgFor,
+    UpperCasePipe,
+    HeroDetailComponent,
+    RouterModule,
+  ],
 })
 export class HeroesComponent implements OnInit, OnDestroy {
   heroes: Hero[];
@@ -20,10 +28,7 @@ export class HeroesComponent implements OnInit, OnDestroy {
 
   heroSub: Subscription;
 
-  constructor(
-    private heroService: HeroService,
-    private messageService: MessageService
-  ) {}
+  constructor(private heroService: HeroService) {}
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -35,11 +40,6 @@ export class HeroesComponent implements OnInit, OnDestroy {
     this.heroSub = this.heroService.getHeroes().subscribe((resp: Hero[]) => {
       this.heroes = resp;
     });
-  }
-
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
-    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
   }
 
   ngOnDestroy(): void {
